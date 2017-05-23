@@ -7,7 +7,7 @@ all: compile_mum generate_binary
 
 generate_binary:
 	mkdir -p bin/
-	$(CC) -o bin/contraponto src/main.cpp obj/*.o -I lib/MuM
+	$(CC) -o bin/cpp_contraponto src/main.cpp obj/*.o -I lib/MuM
 
 
 compile_mum:
@@ -21,7 +21,7 @@ compile_mum:
 
 
 clean:
-	-rm -rf bin/
+	-rm -rf bin/cpp_contraponto
 	-rm -rf obj/
 	-rm -rf *.sco
 	-rm -rf *.orc
