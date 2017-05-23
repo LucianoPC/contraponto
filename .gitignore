@@ -55,6 +55,7 @@ tags
 bin/*
 !bin/contraponto
 obj/
+output/
 
 # MuM Library
 *.sco
