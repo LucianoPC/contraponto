@@ -20,8 +20,6 @@ compile_mum:
 	$(CC) -c lib/MuM/MuMaterial.cpp -o obj/MuMaterial.o
 
 
-# g++ -o ${MAIN} ${MAIN}.cpp ${OUTFOLDER}/MuUtil.o ${OUTFOLDER}/MuError.o ${OUTFOLDER}/MuParamBlock.o ${OUTFOLDER}/MuNote.o ${OUTFOLDER}/MuVoice.o ${OUTFOLDER}/MuMaterial.o
-
 clean:
 	-rm -rf bin/
 	-rm -rf obj/
