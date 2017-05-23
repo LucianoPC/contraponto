@@ -1,2 +1,16 @@
 #!/bin/bash
-echo "Hello!"
+
+if [ "$#" -ne  2 ]; then
+    echo "Usage $0 [score_file_path] [output_folder]"
+    exit 1
+fi
+
+SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+SCORE_FILE_PATH=$1
+OUTPUT_PATH=$2
+
+$SCRIPT_PATH/cpp_contraponto $SCORE_FILE_PATH $OUTPUT_PATH
+
+csound $OUTPUT_PATH/*.orc $OUTPUT_PATH/*.sco
+mv test.wav $OUTPUT_PATH/output.wav
