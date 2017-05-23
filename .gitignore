@@ -54,3 +54,7 @@ tags
 # Compilation
 bin/
 obj/
+
+# MuM Library
+*.sco
+*.orc

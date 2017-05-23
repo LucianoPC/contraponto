@@ -2,6 +2,14 @@ CC = g++
 prefix = /usr/local
 
 
+all: generate_binary
+
+
+generate_binary: compile_mum
+	mkdir -p bin/
+	$(CC) -o bin/contraponto src/main.cpp obj/*.o -I lib/MuM
+
+
 compile_mum:
 	mkdir -p obj/
 	$(CC) -c lib/MuM/MuUtil.cpp -o obj/MuUtil.o
@@ -12,5 +20,10 @@ compile_mum:
 	$(CC) -c lib/MuM/MuMaterial.cpp -o obj/MuMaterial.o
 
 
+# g++ -o ${MAIN} ${MAIN}.cpp ${OUTFOLDER}/MuUtil.o ${OUTFOLDER}/MuError.o ${OUTFOLDER}/MuParamBlock.o ${OUTFOLDER}/MuNote.o ${OUTFOLDER}/MuVoice.o ${OUTFOLDER}/MuMaterial.o
+
 clean:
+	-rm -rf bin/
 	-rm -rf obj/
+	-rm -rf *.sco
+	-rm -rf *.orc
