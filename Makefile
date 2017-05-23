@@ -2,10 +2,10 @@ CC = g++
 prefix = /usr/local
 
 
-all: generate_binary
+all: compile_mum generate_binary
 
 
-generate_binary: compile_mum
+generate_binary:
 	mkdir -p bin/
 	$(CC) -o bin/contraponto src/main.cpp obj/*.o -I lib/MuM
 
