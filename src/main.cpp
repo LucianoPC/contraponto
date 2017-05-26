@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "MuMaterial.h"
+#include "counter_point.hpp"
 
 using namespace std;
 
@@ -41,6 +42,15 @@ int main (int argc, char* argv[])
     PrintVector(harmonic_range, "harmonic_range");
     PrintVector(fit_on_scale, "fit_on_scale  ");
     PrintVector(without_unison, "without_unison");
+
+    MuMaterial material;
+    material += note;
+
+    note.SetPitch(62);
+    material += note;
+
+    CounterPoint counter_point;
+    counter_point.SetMaterial(material);
 
     return 0;
 }
