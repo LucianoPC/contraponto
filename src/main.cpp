@@ -13,6 +13,7 @@ void ValidateArguments (int argc, char* argv[]);
 void PrintVector (vector<int> v, string message);
 vector<int> GetHarmonicRange (int note_pitch);
 vector<int> FixPitchsToScale (int scale_pitch, vector<int> pitchs);
+vector<int> RemoveUnisonFromPitchs(int unison_pitch, vector<int> pitchs);
 
 int main (int argc, char* argv[])
 {
@@ -35,9 +36,11 @@ int main (int argc, char* argv[])
 
     vector<int> harmonic_range = GetHarmonicRange(note.Pitch());
     vector<int> fit_on_scale = FixPitchsToScale(60, harmonic_range);
+    vector<int> without_unison = RemoveUnisonFromPitchs(60, fit_on_scale);
 
     PrintVector(harmonic_range, "harmonic_range");
     PrintVector(fit_on_scale, "fit_on_scale  ");
+    PrintVector(without_unison, "without_unison");
 
     return 0;
 }
@@ -101,4 +104,16 @@ vector<int> FixPitchsToScale (int scale_pitch, vector<int> pitchs)
     }
 
     return pitchs_on_scale;
+}
+
+vector<int> RemoveUnisonFromPitchs(int unison_pitch, vector<int> pitchs)
+{
+    vector<int> pitchs_without_unison = pitchs;
+
+    pitchs_without_unison.erase(remove(pitchs_without_unison.begin(),
+                                       pitchs_without_unison.end(),
+                                       unison_pitch),
+                                pitchs_without_unison.end());
+
+    return pitchs_without_unison;
 }
