@@ -10,9 +10,9 @@
 using namespace std;
 
 void ValidateArguments (int argc, char* argv[]);
-void PrintVector (vector<short> v, string message);
-vector<short> GetHarmonicRange (short note_pitch);
-vector<short> FixPitchsToScale (short scale_pitch, vector<short> pitchs);
+void PrintVector (vector<int> v, string message);
+vector<int> GetHarmonicRange (int note_pitch);
+vector<int> FixPitchsToScale (int scale_pitch, vector<int> pitchs);
 
 int main (int argc, char* argv[])
 {
@@ -33,8 +33,8 @@ int main (int argc, char* argv[])
     MuNote note;
     note.SetPitch(60);
 
-    vector<short> harmonic_range = GetHarmonicRange(note.Pitch());
-    vector<short> fit_on_scale = FixPitchsToScale(60, harmonic_range);
+    vector<int> harmonic_range = GetHarmonicRange(note.Pitch());
+    vector<int> fit_on_scale = FixPitchsToScale(60, harmonic_range);
 
     PrintVector(harmonic_range, "harmonic_range");
     PrintVector(fit_on_scale, "fit_on_scale  ");
@@ -52,7 +52,7 @@ void ValidateArguments (int argc, char* argv[])
     }
 }
 
-void PrintVector (vector<short> v, string message)
+void PrintVector (vector<int> v, string message)
 {
     cout << message << ": ";
     for (unsigned int index = 0; index < v.size(); index++)
@@ -62,22 +62,22 @@ void PrintVector (vector<short> v, string message)
     cout << endl;
 }
 
-vector<short> GetHarmonicRange (short note_pitch)
+vector<int> GetHarmonicRange (int note_pitch)
 {
-    short unison = note_pitch;
-    short third_minor = note_pitch - 3;
-    short third_major = note_pitch - 4;
-    short fifith_perfect = note_pitch - 7;
-    short sixth_minor = note_pitch - 8;
-    short sixth_major = note_pitch - 9;
+    int unison = note_pitch;
+    int third_minor = note_pitch - 3;
+    int third_major = note_pitch - 4;
+    int fifith_perfect = note_pitch - 7;
+    int sixth_minor = note_pitch - 8;
+    int sixth_major = note_pitch - 9;
 
-    vector<short> harmonic_range {unison, third_minor, third_major,
+    vector<int> harmonic_range {unison, third_minor, third_major,
                                   fifith_perfect, sixth_minor, sixth_major};
 
     return harmonic_range;
 }
 
-vector<short> FixPitchsToScale (short scale_pitch, vector<short> pitchs)
+vector<int> FixPitchsToScale (int scale_pitch, vector<int> pitchs)
 {
     scale_pitch = scale_pitch % 12;
 
@@ -86,7 +86,7 @@ vector<short> FixPitchsToScale (short scale_pitch, vector<short> pitchs)
                                  7 + scale_pitch, 9 + scale_pitch,
                                  11 + scale_pitch };
 
-    vector<short> pitchs_on_scale;
+    vector<int> pitchs_on_scale;
 
     for (unsigned int index = 0; index < pitchs.size(); index++)
     {
@@ -99,9 +99,6 @@ vector<short> FixPitchsToScale (short scale_pitch, vector<short> pitchs)
             pitchs_on_scale.push_back(pitchs[index]);
         }
     }
-
-    // vector<short> scale_pitchs_short(scale_pitchs.begin(), scale_pitchs.end());
-    // PrintVector(scale_pitchs_short, "scale_pitchs");
 
     return pitchs_on_scale;
 }
