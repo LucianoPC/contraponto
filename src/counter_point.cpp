@@ -1,21 +1,44 @@
+#include <algorithm>
 #include "counter_point.hpp"
+
 
 CounterPoint::CounterPoint()
 {
-
+    this->scale_pitch = 60;
 }
 
 void
 CounterPoint::SetMaterial(MuMaterial material)
 {
     this->material = material;
+    SetScalePitch(material.GetNote(0).Pitch());
 
     long number_of_notes = material.NumberOfNotes();
 
     for (long index = 0; index < number_of_notes; index++)
     {
-        vector<int> harmonic_range = GetHarmonicRange(index);
+        vector<int> harmonic_pitchs = GetHarmonicRange(index);
+        harmonic_pitchs = FixPitchsToScale(harmonic_pitchs);
+
+        cout << "pitch: " << material.GetNote(index).Pitch() << "  harmonic_pitchs: ";
+        for (int j = 0; j < harmonic_pitchs.size(); j++)
+        {
+            cout << harmonic_pitchs[j] << " ";
+        }
+        cout << endl;
+
     }
+}
+
+void
+CounterPoint::SetScalePitch(int scale_pitch)
+{
+    scale_pitch = scale_pitch % 12;
+    this->scale_pitch = scale_pitch;
+    this->scale_pitchs = { 0 + scale_pitch, 2 + scale_pitch,
+                           4 + scale_pitch, 5 + scale_pitch,
+                           7 + scale_pitch, 9 + scale_pitch,
+                           11 + scale_pitch };
 }
 
 vector<int>
@@ -41,12 +64,37 @@ CounterPoint::GetHarmonicRange (int note_index)
                            sixth_minor, sixth_major };
     }
 
-    cout << "note_pitch: " << note_pitch << "  harmonic_range: ";
-    for (int j = 0; j < harmonic_range.size(); j++)
+    return harmonic_range;
+}
+
+vector<int>
+CounterPoint::FixPitchsToScale (vector<int> pitchs)
+{
+    vector<int> pitchs_on_scale;
+
+    for (unsigned int index = 0; index < pitchs.size(); index++)
     {
-        cout << harmonic_range[j] << " ";
+        int pitch = pitchs[index] % 12;
+        bool found_pitch = find(this->scale_pitchs.begin(),
+                                this->scale_pitchs.end(),
+                                pitch) != this->scale_pitchs.end();
+
+        if(found_pitch)
+        {
+            pitchs_on_scale.push_back(pitchs[index]);
+        }
+    }
+
+    return pitchs_on_scale;
+}
+
+void
+CounterPoint::PrintVector (vector<int> v, string message)
+{
+    cout << message << ": ";
+    for (unsigned int index = 0; index < v.size(); index++)
+    {
+        cout << v[index] << " ";
     }
     cout << endl;
-
-    return harmonic_range;
 }

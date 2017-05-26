@@ -35,13 +35,13 @@ int main (int argc, char* argv[])
     MuNote note;
     note.SetPitch(60);
 
-    vector<int> harmonic_range = GetHarmonicRange(note.Pitch());
-    vector<int> fit_on_scale = FixPitchsToScale(60, harmonic_range);
-    vector<int> without_unison = RemoveUnisonFromPitchs(60, fit_on_scale);
+    // vector<int> harmonic_range = GetHarmonicRange(note.Pitch());
+    // vector<int> fit_on_scale = FixPitchsToScale(60, harmonic_range);
+    // vector<int> without_unison = RemoveUnisonFromPitchs(60, fit_on_scale);
 
-    PrintVector(harmonic_range, "harmonic_range");
-    PrintVector(fit_on_scale, "fit_on_scale  ");
-    PrintVector(without_unison, "without_unison");
+    // PrintVector(harmonic_range, "harmonic_range");
+    // PrintVector(fit_on_scale, "fit_on_scale  ");
+    // PrintVector(without_unison, "without_unison");
 
     MuMaterial material;
     material += note;
