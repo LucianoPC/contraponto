@@ -10,8 +10,9 @@
 using namespace std;
 
 void ValidateArguments (int argc, char* argv[]);
-vector<short> GetMelodicPitchs (MuNote note);
-bool isValidMelodicNote (MuNote note_one, MuNote note_two);
+void PrintVector (vector<short> v, string message);
+vector<short> GetHarmonicRange (short note_pitch);
+vector<short> FixPitchsToScale (short scale_pitch, vector<short> pitchs);
 
 int main (int argc, char* argv[])
 {
@@ -30,14 +31,13 @@ int main (int argc, char* argv[])
 
 
     MuNote note;
-    note.SetPitch(62);
-    vector<short> melodic_pitchs = GetMelodicPitchs(note);
+    note.SetPitch(60);
 
-    for (unsigned int index = 0; index < melodic_pitchs.size(); index++)
-    {
-        cout << melodic_pitchs[index] << " ";
-    }
-    cout << endl;
+    vector<short> harmonic_range = GetHarmonicRange(note.Pitch());
+    vector<short> fit_on_scale = FixPitchsToScale(60, harmonic_range);
+
+    PrintVector(harmonic_range, "harmonic_range");
+    PrintVector(fit_on_scale, "fit_on_scale  ");
 
     return 0;
 }
@@ -52,59 +52,56 @@ void ValidateArguments (int argc, char* argv[])
     }
 }
 
-vector<short> GetMelodicPitchs (MuNote note)
+void PrintVector (vector<short> v, string message)
 {
-    short key = note.Pitch() % 12;
-    vector<short> melodic_pitchs;
-
-    for (int index = 1; index <= 8; index++)
+    cout << message << ": ";
+    for (unsigned int index = 0; index < v.size(); index++)
     {
-        MuMaterial material;
-        material += note;
-        material.DiatonicTranspose(0, MAJOR_MODE, index, ASCENDING);
+        cout << v[index] << " ";
+    }
+    cout << endl;
+}
 
-        if(isValidMelodicNote(note, material.GetFirstNote()))
+vector<short> GetHarmonicRange (short note_pitch)
+{
+    short unison = note_pitch;
+    short third_minor = note_pitch - 3;
+    short third_major = note_pitch - 4;
+    short fifith_perfect = note_pitch - 7;
+    short sixth_minor = note_pitch - 8;
+    short sixth_major = note_pitch - 9;
+
+    vector<short> harmonic_range {unison, third_minor, third_major,
+                                  fifith_perfect, sixth_minor, sixth_major};
+
+    return harmonic_range;
+}
+
+vector<short> FixPitchsToScale (short scale_pitch, vector<short> pitchs)
+{
+    scale_pitch = scale_pitch % 12;
+
+    vector<int> scale_pitchs = { 0 + scale_pitch, 2 + scale_pitch,
+                                 4 + scale_pitch, 5 + scale_pitch,
+                                 7 + scale_pitch, 9 + scale_pitch,
+                                 11 + scale_pitch };
+
+    vector<short> pitchs_on_scale;
+
+    for (unsigned int index = 0; index < pitchs.size(); index++)
+    {
+        int pitch = pitchs[index] % 12;
+        bool found_pitch = find(scale_pitchs.begin(), scale_pitchs.end(),
+                                pitch) != scale_pitchs.end();
+
+        if(found_pitch)
         {
-            melodic_pitchs.push_back(material.GetFirstNote().Pitch());
-        }
-
-        material.Clear();
-        material += note;
-        material.DiatonicTranspose(0, MAJOR_MODE, index, DESCENDING);
-
-        if(isValidMelodicNote(note, material.GetFirstNote()))
-        {
-            melodic_pitchs.push_back(material.GetFirstNote().Pitch());
+            pitchs_on_scale.push_back(pitchs[index]);
         }
     }
 
-    sort(melodic_pitchs.begin(), melodic_pitchs.end());
+    // vector<short> scale_pitchs_short(scale_pitchs.begin(), scale_pitchs.end());
+    // PrintVector(scale_pitchs_short, "scale_pitchs");
 
-    return melodic_pitchs;
-}
-
-bool isValidMelodicNote (MuNote note_one, MuNote note_two)
-{
-    short interval = note_one.Pitch() - note_two.Pitch();
-    short abs_interval = abs(interval);
-
-    cout << "interval: " << abs_interval << "  pitch: " << note_two.Pitch() << endl;
-
-    bool second_minor = abs_interval == 1;
-    bool second_major = abs_interval == 2;
-    bool third_minor = abs_interval == 3;
-    bool third_major = abs_interval == 4;
-    bool fourth_perfect = abs_interval == 5;
-    bool fifth_perfect = abs_interval == 7;
-    bool sixth_minor = interval == 8;
-    bool octave = abs_interval == 12;
-
-    bool isValid = second_minor || second_major;
-    isValid |= third_minor || third_major;
-    isValid |= fourth_perfect;
-    isValid |= fifth_perfect;
-    isValid |= sixth_minor;
-    isValid |= octave;
-
-    return isValid;
+    return pitchs_on_scale;
 }
