@@ -54,6 +54,7 @@ int main (int argc, char* argv[])
 
     CounterPoint counter_point;
     counter_point.SetMaterial(material);
+    counter_point.PrintHarmonicPitchs();
 
     return 0;
 }

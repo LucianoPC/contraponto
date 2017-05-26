@@ -13,11 +13,15 @@ public:
     void SetMaterial(MuMaterial material);
     void SetScalePitch(int scale_pitch);
 
+    void PrintHarmonicPitchs();
+
 private:
 
     int scale_pitch;
 
     vector<int> scale_pitchs;
+
+    vector< vector<int> > harmonic_pitchs;
 
     MuMaterial material;
 
