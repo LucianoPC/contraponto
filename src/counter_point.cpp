@@ -105,6 +105,44 @@ CounterPoint::FixPitchsToScale (vector<int> pitchs)
     return pitchs_on_scale;
 }
 
+vector<int>
+CounterPoint::GetMelodicRange (int note_index)
+{
+    int note_pitch = this->material.GetNote(note_index).Pitch();
+
+    int second_minor_descending = note_pitch - 1;
+    int second_major_descending = note_pitch - 2;
+    int third_minor_descending = note_pitch - 3;
+    int third_major_descending = note_pitch - 4;
+    int fourth_perfect_descending = note_pitch - 5;
+    int fifith_perfect_descending = note_pitch - 7;
+    int octave_descending = note_pitch - 8;
+
+    int second_minor_ascending = note_pitch + 1;
+    int second_major_ascending = note_pitch + 2;
+    int third_minor_ascending = note_pitch + 3;
+    int third_major_ascending = note_pitch + 4;
+    int fourth_perfect_ascending = note_pitch + 5;
+    int fifith_perfect_ascending = note_pitch + 7;
+    int sixth_minor_ascending = note_pitch + 8;
+    int octave_ascending = note_pitch + 8;
+
+    vector<int> melodic_range { octave_descending,
+                                fifith_perfect_descending,
+                                fourth_perfect_descending,
+                                third_major_descending, third_minor_descending,
+                                second_major_descending,
+                                second_minor_descending,
+                                second_minor_ascending, second_major_ascending,
+                                third_minor_ascending, third_major_ascending,
+                                fourth_perfect_ascending,
+                                fifith_perfect_ascending,
+                                sixth_minor_ascending,
+                                octave_ascending };
+
+    return melodic_range;
+}
+
 void
 CounterPoint::PrintVector (vector<int> v, string message)
 {
