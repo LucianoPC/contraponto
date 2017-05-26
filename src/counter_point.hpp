@@ -8,7 +8,7 @@ class CounterPoint
 {
 public:
 
-    CounterPoint();
+    CounterPoint(MuMaterial material);
 
     void SetMaterial(MuMaterial material);
     void SetScalePitch(int scale_pitch);

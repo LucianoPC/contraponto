@@ -2,9 +2,9 @@
 #include "counter_point.hpp"
 
 
-CounterPoint::CounterPoint()
+CounterPoint::CounterPoint(MuMaterial material)
 {
-    this->scale_pitch = 60;
+    SetMaterial(material);
 }
 
 void

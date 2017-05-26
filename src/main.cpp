@@ -31,19 +31,10 @@ int main (int argc, char* argv[])
     // material.Score(output_path + "score");
     // material.Orchestra(output_path + "orchestra");
 
-
     MuNote note;
-    note.SetPitch(60);
-
-    // vector<int> harmonic_range = GetHarmonicRange(note.Pitch());
-    // vector<int> fit_on_scale = FixPitchsToScale(60, harmonic_range);
-    // vector<int> without_unison = RemoveUnisonFromPitchs(60, fit_on_scale);
-
-    // PrintVector(harmonic_range, "harmonic_range");
-    // PrintVector(fit_on_scale, "fit_on_scale  ");
-    // PrintVector(without_unison, "without_unison");
-
     MuMaterial material;
+
+    note.SetPitch(60);
     material += note;
 
     note.SetPitch(62);
@@ -52,8 +43,7 @@ int main (int argc, char* argv[])
     note.SetPitch(64);
     material += note;
 
-    CounterPoint counter_point;
-    counter_point.SetMaterial(material);
+    CounterPoint counter_point(material);
     counter_point.PrintHarmonicPitchs();
 
     return 0;
