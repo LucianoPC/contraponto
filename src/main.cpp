@@ -18,33 +18,37 @@ vector<int> RemoveUnisonFromPitchs(int unison_pitch, vector<int> pitchs);
 
 int main (int argc, char* argv[])
 {
-    // ValidateArguments(argc, argv);
+    ValidateArguments(argc, argv);
 
-    // string output_path = argc > 2 ? argv[2] : "./";
-    // string score_file_path = argv[1];
+    string output_path = argc > 2 ? argv[2] : "./";
+    string score_file_path = argv[1];
 
-    // MuInit();
-    // MuMaterial material;
-    // material.LoadScore(argv[1]);
-
-    // material.SetDefaultFunctionTables();
-    // material.Score(output_path + "score");
-    // material.Orchestra(output_path + "orchestra");
-
-    MuNote note;
+    MuInit();
     MuMaterial material;
-
-    note.SetPitch(60);
-    material += note;
-
-    note.SetPitch(62);
-    material += note;
-
-    note.SetPitch(64);
-    material += note;
+    material.LoadScore(argv[1]);
 
     CounterPoint counter_point(material);
+    counter_point.SetScalePitch(60);
     counter_point.PrintHarmonicPitchs();
+
+    material.SetDefaultFunctionTables();
+    material.Score(output_path + "score");
+    material.Orchestra(output_path + "orchestra");
+
+    // MuNote note;
+    // MuMaterial material;
+
+    // note.SetPitch(60);
+    // material += note;
+
+    // note.SetPitch(62);
+    // material += note;
+
+    // note.SetPitch(64);
+    // material += note;
+
+    // CounterPoint counter_point(material);
+    // counter_point.PrintHarmonicPitchs();
 
     return 0;
 }
