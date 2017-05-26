@@ -12,15 +12,7 @@ CounterPoint::SetMaterial(MuMaterial material)
 {
     this->material = material;
     SetScalePitch(material.GetNote(0).Pitch());
-
-    this->harmonic_pitchs.clear();
-    for (long index = 0; index < material.NumberOfNotes(); index++)
-    {
-        vector<int> harmonic_pitch_vector = GetHarmonicRange(index);
-        harmonic_pitch_vector = FixPitchsToScale(harmonic_pitch_vector);
-
-        this->harmonic_pitchs.push_back(harmonic_pitch_vector);
-    }
+    UpdateHarmonicPitchs();
 }
 
 void
@@ -41,12 +33,25 @@ CounterPoint::PrintHarmonicPitchs()
     {
         short pitch = this->material.GetNote(i).Pitch();
 
-        cout << "pirch: " << pitch << " [ ";
+        cout << "pitch: " << pitch << " [ ";
         for (int j = 0; j < harmonic_pitchs[i].size(); j++)
         {
             cout << this->harmonic_pitchs[i][j] << " ";
         }
         cout << "]" << endl;
+    }
+}
+
+void
+CounterPoint::UpdateHarmonicPitchs ()
+{
+    this->harmonic_pitchs.clear();
+    for (long index = 0; index < material.NumberOfNotes(); index++)
+    {
+        vector<int> harmonic_pitch_vector = GetHarmonicRange(index);
+        harmonic_pitch_vector = FixPitchsToScale(harmonic_pitch_vector);
+
+        this->harmonic_pitchs.push_back(harmonic_pitch_vector);
     }
 }
 

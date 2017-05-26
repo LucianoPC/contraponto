@@ -25,6 +25,7 @@ private:
 
     MuMaterial material;
 
+    void UpdateHarmonicPitchs ();
     vector<int> GetHarmonicRange (int note_pitch);
     vector<int> FixPitchsToScale (vector<int> pitchs);
 
