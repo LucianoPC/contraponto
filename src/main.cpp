@@ -49,6 +49,9 @@ int main (int argc, char* argv[])
     note.SetPitch(62);
     material += note;
 
+    note.SetPitch(64);
+    material += note;
+
     CounterPoint counter_point;
     counter_point.SetMaterial(material);
 

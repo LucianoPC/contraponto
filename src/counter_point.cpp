@@ -53,12 +53,15 @@ CounterPoint::GetHarmonicRange (int note_index)
     int sixth_minor = note_pitch - 8;
     int sixth_major = note_pitch - 9;
 
-    vector<int> harmonic_range;
-    bool is_first_species = note_index == 0;
+    bool is_first_note = note_index == 0;
+    bool is_last_note = note_index == this->material.NumberOfNotes() - 1;
 
-    if(is_first_species) {
+    vector<int> harmonic_range;
+    if(is_first_note) {
         harmonic_range = { unison, third_minor, third_major, fifith_perfect,
                            sixth_minor, sixth_major };
+    } else if(is_last_note) {
+        harmonic_range = { this->material.GetNote(0).Pitch() };
     } else {
         harmonic_range = { third_minor, third_major, fifith_perfect,
                            sixth_minor, sixth_major };
