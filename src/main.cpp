@@ -31,6 +31,8 @@ int main (int argc, char* argv[])
     counter_point.SetScalePitch(60);
     counter_point.PrintHarmonicPitchs();
 
+    counter_point.GenerateCounterPointPitchs();
+
     material.SetDefaultFunctionTables();
     material.Score(output_path + "score");
     material.Orchestra(output_path + "orchestra");
