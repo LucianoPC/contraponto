@@ -31,11 +31,27 @@ int main (int argc, char* argv[])
     counter_point.SetScalePitch(60);
     counter_point.PrintHarmonicPitchs();
 
-    counter_point.GenerateCounterPointPitchs();
+
+    MuMaterial counter_point_material = counter_point.GenerateCounterPointMaterial();
+
+    // material.Show();
+    // counter_point_material.Show();
+
+    material.AddVoices(1);
+    material.SetVoice(1, counter_point_material, 0);
+
+    material.SetInstrument(0, 2);
+    material.SetInstrument(1, 3);
+
+    material.Show();
 
     material.SetDefaultFunctionTables();
     material.Score(output_path + "score");
     material.Orchestra(output_path + "orchestra");
+
+    // counter_point_material.SetDefaultFunctionTables();
+    // counter_point_material.Score(output_path + "score_cp");
+    // counter_point_material.Orchestra(output_path + "orchestra_cp");
 
     // MuNote note;
     // MuMaterial material;

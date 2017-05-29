@@ -10,6 +10,7 @@ public:
 
     CounterPoint(MuMaterial material);
 
+    MuMaterial GenerateCounterPointMaterial();
     vector<int> GenerateCounterPointPitchs();
 
     void SetMaterial(MuMaterial material);
