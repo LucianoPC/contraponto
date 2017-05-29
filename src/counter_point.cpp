@@ -34,66 +34,66 @@ CounterPoint::GenerateCounterPointPitchs()
 
     for (long i = 0; i < this->material.NumberOfNotes(); i++)
     {
-        bool is_first_note = i == 0;
-        bool is_last_note = i == this->material.NumberOfNotes() - 1;
+        int last_pitch = i > 0 ? counter_point_pitchs[i - 1] : 0;
 
-        if(is_first_note)
-        {
-            int pitch_index = Between(0, this->harmonic_pitchs[i].size() - 1);
-            int pitch = this->harmonic_pitchs[i][pitch_index];
+        vector<int> possible_pitchs = GetPossiblePitchs(last_pitch, i);
 
-            counter_point_pitchs.push_back(pitch);
-        }
-        else if(is_last_note)
-        {
-            int pitch = this->harmonic_pitchs[i][0];
+        int pitch_index = Between(0, possible_pitchs.size() - 1);
+        int pitch = possible_pitchs[pitch_index];
 
-            counter_point_pitchs.push_back(pitch);
-        }
-        else
-        {
-            int last_pitch = counter_point_pitchs[i - 1];
-
-            vector<int> melodic_pitchs = GetMelodicRange(last_pitch);
-
-            vector<int> possible_pitchs;
-            for (int j = 0; j < melodic_pitchs.size(); j++)
-            {
-
-                bool found_pitch = false;
-                int melodic_pitch = melodic_pitchs[j];
-                for(int a = 0; a < this->harmonic_pitchs[i].size() && !found_pitch; a++)
-                {
-                    int harmonic_pitch = this->harmonic_pitchs[i][a];
-
-                    bool same_note = (melodic_pitch % 12) == (harmonic_pitch % 12);
-                    bool is_lower = melodic_pitch <= harmonic_pitch;
-
-                    found_pitch = same_note && is_lower;
-                }
-
-                if(found_pitch)
-                {
-                    possible_pitchs.push_back(melodic_pitch);
-                }
-            }
-
-            cout << endl << "last_pitch: " << last_pitch << " (" << last_pitch % 12 << ")" << endl;
-            PrintVector(melodic_pitchs, "melodic_pitchs");
-            PrintVector(this->harmonic_pitchs[i], "harmonic_pitchs");
-            PrintVector(possible_pitchs, "possible_pitchs");
-
-            int pitch_index = Between(0, melodic_pitchs.size() - 1);
-            int pitch = melodic_pitchs[pitch_index];
-
-            counter_point_pitchs.push_back(pitch);
-
-        }
+        counter_point_pitchs.push_back(pitch);
     }
 
     PrintVector(counter_point_pitchs, "counter_point_pitchs");
 
     return counter_point_pitchs;
+}
+
+vector<int>
+CounterPoint::GetPossiblePitchs (int last_pitch, int harmonic_pitchs_index)
+{
+    vector<int> possible_pitchs;
+
+    int index = harmonic_pitchs_index;
+    vector<int> harmonic_pitchs = this->harmonic_pitchs_list[index];
+
+    bool is_first_note = harmonic_pitchs_index == 0;
+    bool is_last_note = index == this->material.NumberOfNotes() - 1;
+
+    if(is_first_note || is_last_note)
+    {
+        possible_pitchs = harmonic_pitchs;
+    }
+    else
+    {
+        vector<int> melodic_pitchs = GetMelodicRange(last_pitch);
+
+        for (int j = 0; j < melodic_pitchs.size(); j++)
+        {
+            bool found_pitch = false;
+            int melodic_pitch = melodic_pitchs[j];
+            for(int a = 0; a < harmonic_pitchs.size() && !found_pitch; a++)
+            {
+                int harmonic_pitch = harmonic_pitchs[a];
+                bool same_note = (melodic_pitch % 12) == (harmonic_pitch % 12);
+                bool is_lower = melodic_pitch <= harmonic_pitch;
+
+                found_pitch = same_note && is_lower;
+            }
+
+            if(found_pitch)
+            {
+                possible_pitchs.push_back(melodic_pitch);
+            }
+        }
+
+        cout << endl << "last_pitch: " << last_pitch << " (" << last_pitch % 12 << ")" << endl;
+        PrintVector(melodic_pitchs, "melodic_pitchs");
+        PrintVector(harmonic_pitchs, "harmonic_pitchs_list");
+        PrintVector(possible_pitchs, "possible_pitchs");
+    }
+
+    return possible_pitchs;
 }
 
 void
@@ -124,9 +124,9 @@ CounterPoint::PrintHarmonicPitchs()
         short pitch = this->material.GetNote(i).Pitch();
 
         cout << "pitch: " << pitch << " [ ";
-        for (int j = 0; j < harmonic_pitchs[i].size(); j++)
+        for (int j = 0; j < harmonic_pitchs_list[i].size(); j++)
         {
-            cout << this->harmonic_pitchs[i][j] % 12 << " ";
+            cout << this->harmonic_pitchs_list[i][j] % 12 << " ";
         }
         cout << "]" << endl;
     }
@@ -135,11 +135,11 @@ CounterPoint::PrintHarmonicPitchs()
 void
 CounterPoint::UpdateHarmonicPitchs ()
 {
-    this->harmonic_pitchs.clear();
+    this->harmonic_pitchs_list.clear();
     for (long index = 0; index < material.NumberOfNotes(); index++)
     {
         vector<int> harmonic_pitch_vector = GetHarmonicRange(index);
-        this->harmonic_pitchs.push_back(harmonic_pitch_vector);
+        this->harmonic_pitchs_list.push_back(harmonic_pitch_vector);
     }
 }
 

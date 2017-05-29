@@ -8,15 +8,14 @@ class CounterPoint
 {
 public:
 
-    CounterPoint(MuMaterial material);
+    CounterPoint (MuMaterial material);
 
-    MuMaterial GenerateCounterPointMaterial();
-    vector<int> GenerateCounterPointPitchs();
+    MuMaterial GenerateCounterPointMaterial ();
 
-    void SetMaterial(MuMaterial material);
-    void SetScalePitch(int scale_pitch);
+    void SetMaterial (MuMaterial material);
+    void SetScalePitch (int scale_pitch);
 
-    void PrintHarmonicPitchs();
+    void PrintHarmonicPitchs ();
 
 private:
 
@@ -24,7 +23,7 @@ private:
 
     vector<int> scale_pitchs;
 
-    vector< vector<int> > harmonic_pitchs;
+    vector< vector<int> > harmonic_pitchs_list;
 
     MuMaterial material;
 
@@ -34,6 +33,11 @@ private:
     vector<int> GetMelodicRange (int note_pitch);
 
     vector<int> FixPitchsToScale (vector<int> pitchs);
+
+    vector<int> GenerateCounterPointPitchs();
+
+    vector<int> GetPossiblePitchs (int last_pitch,
+                                   int harmonic_pitchs_index);
 
     void PrintVector (vector<int> v, string message);
 };
