@@ -7,6 +7,7 @@
 #include <vector>
 #include "MuMaterial.h"
 #include "counter_point.hpp"
+#include "voice.hpp"
 
 using namespace std;
 
@@ -48,6 +49,16 @@ int main (int argc, char* argv[])
     material.SetDefaultFunctionTables();
     material.Score(output_path + "score");
     material.Orchestra(output_path + "orchestra");
+
+    Voice::Manager voice_manager;
+    voice_manager.AddVoice("Soprano", 60, 79);
+    voice_manager.AddVoice("Contralto", 55, 72);
+    voice_manager.AddVoice("Tenor", 47, 67);
+    voice_manager.AddVoice("Baixo", 40, 60);
+
+    Voice voice = voice_manager.GetVoice(62);
+
+    cout << "Voice: " << voice.name << endl;
 
     // counter_point_material.SetDefaultFunctionTables();
     // counter_point_material.Score(output_path + "score_cp");
