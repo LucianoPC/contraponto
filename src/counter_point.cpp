@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <map>
 #include "MuUtil.h"
 #include "counter_point.hpp"
 #include "voice.hpp"
@@ -34,19 +35,42 @@ vector<int>
 CounterPoint::GenerateCounterPointPitchs()
 {
     vector<int> counter_point_pitchs;
+    map< int, map<int, bool> > used_pitchs;
 
-    for (long i = 0; i < this->material.NumberOfNotes(); i++)
+    for (long index = 0; index < this->material.NumberOfNotes(); index++)
     {
-        int last_pitch = i > 0 ? counter_point_pitchs[i - 1] : 0;
+        int last_pitch = index > 0 ? counter_point_pitchs[index - 1] : 0;
 
-        vector<int> possible_pitchs = GetPossiblePitchs(last_pitch, i);
+        vector<int> possible_pitchs = GetPossiblePitchs(last_pitch, index);
 
         FixPitchsToVoice(possible_pitchs);
+        RemoveUsedPitchs(possible_pitchs, used_pitchs[index]);
 
-        int pitch_index = Between(0, possible_pitchs.size() - 1);
-        int pitch = possible_pitchs[pitch_index];
+        bool has_possible_pitchs = possible_pitchs.size() > 0;
 
-        counter_point_pitchs.push_back(pitch);
+        if(has_possible_pitchs)
+        {
+            int pitch_index = Between(0, possible_pitchs.size() - 1);
+            int pitch = possible_pitchs[pitch_index];
+
+            used_pitchs[index][pitch] = true;
+
+            counter_point_pitchs.push_back(pitch);
+        }
+        else
+        {
+            used_pitchs[index] = map<int, bool>();
+            if(index == 0)
+            {
+                cout << "Dont have solution" << endl;
+                break;
+            }
+            else
+            {
+                index -= 2;
+                counter_point_pitchs.pop_back();
+            }
+        }
     }
 
     PrintVector(counter_point_pitchs, "counter_point_pitchs");
@@ -251,6 +275,26 @@ CounterPoint::FixPitchsToVoice (vector<int>& pitchs)
         bool pitch_is_on_voice = voice.IsOnVoice(pitch);
 
         if(pitch_is_on_voice)
+        {
+            pitchs.push_back(pitch);
+        }
+    }
+}
+
+void
+CounterPoint::RemoveUsedPitchs (vector<int>& pitchs,
+                                map<int, bool> used_pitchs)
+{
+
+    vector<int> old_pitchs = pitchs;
+    pitchs = vector<int>();
+
+    for (unsigned int index = 0; index < old_pitchs.size(); index++)
+    {
+        int pitch = old_pitchs[index];
+        bool is_unused_pitch = !used_pitchs[pitch];
+
+        if(is_unused_pitch)
         {
             pitchs.push_back(pitch);
         }

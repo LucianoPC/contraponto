@@ -41,6 +41,7 @@ private:
 
     vector<int> FixPitchsToScale (vector<int> pitchs);
     void FixPitchsToVoice (vector<int>& pitchs);
+    void RemoveUsedPitchs (vector<int>& pitchs, map<int, bool> used_pitchs);
 
     vector<int> GenerateCounterPointPitchs();
 
