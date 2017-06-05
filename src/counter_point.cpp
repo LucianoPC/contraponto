@@ -13,8 +13,8 @@ CounterPoint::CounterPoint(MuMaterial material)
 MuMaterial
 CounterPoint::GenerateCounterPointMaterial()
 {
-    vector<int> counter_point_pitchs = GenerateCounterPointPitchs();
     SetVoices(this->material.GetNote(0).Pitch());
+    vector<int> counter_point_pitchs = GenerateCounterPointPitchs();
 
     MuMaterial counter_point_material;
 
@@ -40,6 +40,8 @@ CounterPoint::GenerateCounterPointPitchs()
         int last_pitch = i > 0 ? counter_point_pitchs[i - 1] : 0;
 
         vector<int> possible_pitchs = GetPossiblePitchs(last_pitch, i);
+
+        FixPitchsToVoice(possible_pitchs);
 
         int pitch_index = Between(0, possible_pitchs.size() - 1);
         int pitch = possible_pitchs[pitch_index];
@@ -90,7 +92,7 @@ CounterPoint::GetPossiblePitchs (int last_pitch, int harmonic_pitchs_index)
             }
         }
 
-        cout << endl << "last_pitch: " << last_pitch << " (" << last_pitch % 12 << ")" << endl;
+        // cout << endl << "last_pitch: " << last_pitch << " (" << last_pitch % 12 << ")" << endl;
         PrintVector(melodic_pitchs, "melodic_pitchs");
         PrintVector(harmonic_pitchs, "harmonic_pitchs_list");
         PrintVector(possible_pitchs, "possible_pitchs");
@@ -237,6 +239,25 @@ CounterPoint::FixPitchsToScale (vector<int> pitchs)
 }
 
 void
+CounterPoint::FixPitchsToVoice (vector<int>& pitchs)
+{
+    Voice voice = this->counter_point_voice;
+    vector<int> old_pitchs = pitchs;
+    pitchs = vector<int>();
+
+    for (unsigned int index = 0; index < old_pitchs.size(); index++)
+    {
+        int pitch = old_pitchs[index];
+        bool pitch_is_on_voice = voice.IsOnVoice(pitch);
+
+        if(pitch_is_on_voice)
+        {
+            pitchs.push_back(pitch);
+        }
+    }
+}
+
+void
 CounterPoint::InitializeVoiceManager ()
 {
     this->voice_manager = Voice::Manager();
@@ -250,7 +271,6 @@ void
 CounterPoint::SetVoices (int pitch)
 {
     this->cantus_firmus_voice = this->voice_manager.GetVoice(pitch);
-
 
     Voice low_voice = this->cantus_firmus_voice;
     this->counter_point_voice = this->voice_manager.GetLowVoice(low_voice);

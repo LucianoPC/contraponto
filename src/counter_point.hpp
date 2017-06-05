@@ -40,6 +40,7 @@ private:
     vector<int> GetMelodicRange (int note_pitch);
 
     vector<int> FixPitchsToScale (vector<int> pitchs);
+    void FixPitchsToVoice (vector<int>& pitchs);
 
     vector<int> GenerateCounterPointPitchs();
 
