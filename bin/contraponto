@@ -12,5 +12,5 @@ OUTPUT_PATH=$2
 
 $SCRIPT_PATH/cpp_contraponto $SCORE_FILE_PATH $OUTPUT_PATH
 
-csound $OUTPUT_PATH/*.orc $OUTPUT_PATH/*.sco
+csound $OUTPUT_PATH/*.orc $OUTPUT_PATH/*.sco &>/dev/null
 mv test.wav $OUTPUT_PATH/output.wav
