@@ -31,9 +31,6 @@ int main (int argc, char* argv[])
 
     MuMaterial counter_point_material = counter_point.GenerateCounterPointMaterial();
 
-    // material.Show();
-    // counter_point_material.Show();
-
     material.AddVoices(1);
     material.SetVoice(1, counter_point_material, 0);
 
@@ -47,28 +44,11 @@ int main (int argc, char* argv[])
     material.Orchestra(output_path + "orchestra");
 
 
+    Voice voice = counter_point.cantus_firmus_voice;
+    cout << "Cantus Firmus Voice: " << voice.name << endl;
 
-
-
-
-
-
-
-
-
-
-
-
-
-    Voice::Manager voice_manager;
-    voice_manager.AddVoice("Soprano", 60, 79);
-    voice_manager.AddVoice("Contralto", 55, 72);
-    voice_manager.AddVoice("Tenor", 47, 67);
-    voice_manager.AddVoice("Baixo", 40, 60);
-
-    Voice voice = voice_manager.GetVoice(62);
-
-    cout << "Voice: " << voice.name << endl;
+    voice = counter_point.counter_point_voice;
+    cout << "Counter Point Voice: " << voice.name << endl;
 
     // counter_point_material.SetDefaultFunctionTables();
     // counter_point_material.Score(output_path + "score_cp");

@@ -11,6 +11,7 @@ class Voice
 public:
     class Manager;
 
+    Voice ();
     Voice (string name, int min_pitch, int max_pitch);
 
     bool IsOnVoice (int pitch);
@@ -24,15 +25,13 @@ class Voice::Manager
 {
 public:
 
+    vector<Voice> voices;
+
     void AddVoice (string name, int min_pitch, int max_pitch);
 
     Voice GetVoice (int pitch);
 
     Voice GetLowVoice (Voice base_voice);
-
-private:
-
-    vector<Voice> voices;
 };
 
 #endif

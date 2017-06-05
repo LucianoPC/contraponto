@@ -1,5 +1,13 @@
 #include "voice.hpp"
 
+#include <iostream>
+using namespace std;
+
+Voice::Voice () : Voice("NONE", 0, 0)
+{
+
+}
+
 Voice::Voice (string name, int min_pitch, int max_pitch)
 {
     this->name = name;
@@ -43,6 +51,8 @@ Voice::Manager::GetVoice (int pitch)
 
     int random_index = rand() % possible_voices.size();
 
+    // cout << endl << "voices: " << possible_voices.size() << " random: " << random_index << " voice: " << possible_voices[random_index].name << endl << endl;
+
     return possible_voices[random_index];
 }
 
@@ -59,7 +69,21 @@ Voice::Manager::GetLowVoice (Voice base_voice)
         Voice low_voice = this->voices[low_voice_index];
         int low_voice_distance = base_voice.max_pitch - low_voice.max_pitch;
 
-        if (voice_distance < low_voice_distance)
+        bool voice_has_min_distance = voice_distance < low_voice_distance;
+        bool voice_is_lower = voice_distance > 0;
+        bool low_voice_invalid = low_voice_distance <= 0;
+        bool is_new_lower_voice = low_voice_invalid ||
+                                  (voice_has_min_distance && voice_is_lower);
+
+        // cout << endl;
+        // cout << "voice[" << index << "]: " << this->voices[index].name << endl;
+        // cout << "voice_distance: " << voice_distance << endl;
+        // cout << "voice_has_min_distance: " << voice_has_min_distance << endl;
+        // cout << "voice_is_lower: " << voice_is_lower << endl;
+        // cout << "low_voice_invalid: " << low_voice_invalid << endl;
+        // cout << "is_new_lower_voice: " << is_new_lower_voice << endl;
+
+        if (is_new_lower_voice)
         {
             low_voice_index = index;
         }

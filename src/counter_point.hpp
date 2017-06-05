@@ -3,11 +3,11 @@
 
 #include "vector"
 #include "MuMaterial.h"
+#include "voice.hpp"
 
 class CounterPoint
 {
 public:
-
     CounterPoint (MuMaterial material);
 
     MuMaterial GenerateCounterPointMaterial ();
@@ -17,6 +17,8 @@ public:
 
     void PrintHarmonicPitchs ();
 
+    Voice cantus_firmus_voice;
+    Voice counter_point_voice;
 private:
 
     int scale_pitch;
@@ -27,7 +29,12 @@ private:
 
     MuMaterial material;
 
+    Voice::Manager voice_manager;
+
     void UpdateHarmonicPitchs ();
+
+    void InitializeVoiceManager ();
+    void SetVoices (int pitch);
 
     vector<int> GetHarmonicRange (int note_index);
     vector<int> GetMelodicRange (int note_pitch);

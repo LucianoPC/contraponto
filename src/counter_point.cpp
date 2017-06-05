@@ -1,17 +1,20 @@
 #include <algorithm>
 #include "MuUtil.h"
 #include "counter_point.hpp"
+#include "voice.hpp"
 
 
 CounterPoint::CounterPoint(MuMaterial material)
 {
     SetMaterial(material);
+    InitializeVoiceManager();
 }
 
 MuMaterial
 CounterPoint::GenerateCounterPointMaterial()
 {
     vector<int> counter_point_pitchs = GenerateCounterPointPitchs();
+    SetVoices(this->material.GetNote(0).Pitch());
 
     MuMaterial counter_point_material;
 
@@ -231,6 +234,26 @@ CounterPoint::FixPitchsToScale (vector<int> pitchs)
     }
 
     return pitchs_on_scale;
+}
+
+void
+CounterPoint::InitializeVoiceManager ()
+{
+    this->voice_manager = Voice::Manager();
+    this->voice_manager.AddVoice("Soprano", 60, 79);
+    this->voice_manager.AddVoice("Contralto", 55, 72);
+    this->voice_manager.AddVoice("Tenor", 47, 67);
+    this->voice_manager.AddVoice("Baixo", 40, 60);
+}
+
+void
+CounterPoint::SetVoices (int pitch)
+{
+    this->cantus_firmus_voice = this->voice_manager.GetVoice(pitch);
+
+
+    Voice low_voice = this->cantus_firmus_voice;
+    this->counter_point_voice = this->voice_manager.GetLowVoice(low_voice);
 }
 
 void
